@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 
 namespace EmojiHut.Models
 {
-    public class Emoji
+    public class Emoji : IEmoji
     {
         /// <summary>
         /// 
@@ -36,36 +36,59 @@ namespace EmojiHut.Models
         [JsonProperty("subGroup")]
         public string? SubGroup { get; set; }
 
-        private readonly string baseURL = "https://emoji-api.com/";
-        private readonly string accessKey = "08d9158028fcdddd8927c3e895ad5e84d6f4c9c0";
+        private readonly IConfiguration _configuration;
 
-        // https://emoji-api.com/emojis?access_key=08d9158028fcdddd8927c3e895ad5e84d6f4c9c0
-        public async Task<List<Emoji>> GetAllAsync() => 
-            await Get($"emojis?access_key={accessKey}");
+        private readonly string baseURL;
+        private readonly string accessKey;
 
-        public async Task<List<Emoji>> GetSingleAsync() =>
-            await Get($"emojis/grinning-squinting-face?access_key={accessKey}");
-
-        private async Task<List<Emoji>> Get(string query)
+        public Emoji()
         {
-            List<Emoji>? result = new();
+            _configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            baseURL = _configuration.GetValue<string>("ApiSettings:BaseURL");
+            accessKey = _configuration.GetValue<string>("ApiSettings:AccessKey");
+        }
 
-            using (HttpClient? client = new())
+        public async Task<List<Emoji>> GetAllAsync() =>
+            await GetAsync($"emojis?access_key={accessKey}");
+
+        private async Task<List<Emoji>> GetAsync(string query)
+        {
+            using HttpClient? client = new() { BaseAddress = new Uri(baseURL) };
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            using HttpResponseMessage res = await client.GetAsync(query);
+
+            if (res.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(baseURL);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage res = await client.GetAsync(query);
-
-                if (res.IsSuccessStatusCode)
-                {
-                    string response = await res.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<List<Emoji>>(response);
-                }
+                string response = await res.Content.ReadAsStringAsync();
+                return Deserialize(response);
             }
 
-            return result ?? new List<Emoji>();
-        }       
+            return new List<Emoji>();
+        }
+
+        public async Task<List<Emoji>> GetFallbackDataAsync()
+        {
+            string basePath = _configuration.GetValue<string>("DataPath:BasePath");
+            string emojiPath = _configuration.GetValue<string>("DataPath:Emojis");
+
+            using var reader = new StreamReader($"{basePath}{emojiPath}");
+            string json = await reader.ReadToEndAsync();
+            return Deserialize(json);
+        }
+
+        private static List<Emoji> Deserialize(string json)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<List<Emoji>>(json) ?? new List<Emoji>();
+            }
+            catch (JsonSerializationException e)
+            {
+                throw new JsonSerializationException($"JsonSerializationExcpetion: {e.Message}\n" +
+                                                     $"Response: {json}");
+            }
+        }
     }
 }
