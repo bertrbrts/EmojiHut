@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IEmoji, Emoji>();
+builder.Services.AddSingleton<ICategory, Category>();
 
 var app = builder.Build();
 
