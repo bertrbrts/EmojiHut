@@ -7,6 +7,5 @@ namespace EmojiHut.Models
         string[]? SubCategories { get; set; }
 
         Task<List<Category>> GetAllAsync();
-        Task<List<Category>> GetFallbackDataAsync();
     }
 }

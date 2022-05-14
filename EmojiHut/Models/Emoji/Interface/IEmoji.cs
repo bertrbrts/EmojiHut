@@ -11,6 +11,5 @@ namespace EmojiHut.Models
         string? UnicodeName { get; set; }
 
         Task<List<Emoji>> GetAllAsync();
-        Task<List<Emoji>> GetFallbackDataAsync();
     }
 }

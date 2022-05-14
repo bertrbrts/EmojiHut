@@ -34,17 +34,36 @@ namespace EmojiHut.Models
         /// </summary>
         [JsonProperty("subGroup")]
         public string? SubGroup { get; set; }
+
+        [JsonIgnore]
+        public override string PrimaryQueryString { get; set; } = $"emojis?access_key={AccessKey}";
+        [JsonIgnore]
+        public override string FallbackDataPath { get; set; } = Configuration.GetValue<string>("DataPath:Emojis");
+
         /// <summary>
         /// Returns all emojis in dataset.
         /// </summary>
         /// <returns>List of Emoji</returns>
-        public async Task<List<Emoji>> GetAllAsync() =>
-            await GetAsync<Emoji>($"emojis?access_key={AccessKey}");
+        public async Task<List<Emoji>> GetAllAsync()
+        {
+            List<Emoji> result;
+            try
+            {
+                result = await GetAsync<Emoji>(PrimaryQueryString);
+            }
+            catch (JsonSerializationException)
+            {
+                result = await GetFallbackDataAsync();
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Returns all emojis from fallback dataset.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Emoji>> GetFallbackDataAsync() =>
+        private async Task<List<Emoji>> GetFallbackDataAsync() =>
             await GetFallbackDataAsync<Emoji>(Configuration.GetValue<string>("DataPath:Emojis"));
     }
 }

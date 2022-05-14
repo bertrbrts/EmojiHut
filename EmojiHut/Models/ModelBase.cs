@@ -3,18 +3,20 @@ using System.Net.Http.Headers;
 
 namespace EmojiHut.Models
 {
-    public abstract class ModelBase
+    public abstract class ModelBase : IModel
     {
-        protected static IConfiguration Configuration = 
-            new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        private readonly string _baseURL = Configuration.GetValue<string>("ApiSettings:BaseURL");
 
-        protected string BaseURL = Configuration.GetValue<string>("ApiSettings:BaseURL");
-        protected string AccessKey = Configuration.GetValue<string>("ApiSettings:AccessKey");
-        protected string FallbackBasePath = Configuration.GetValue<string>("DataPath:BasePath");
+        protected readonly static IConfiguration Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        protected readonly static string AccessKey = Configuration.GetValue<string>("ApiSettings:AccessKey");
+        protected readonly static string FallbackBasePath = Configuration.GetValue<string>("DataPath:BasePath");
 
-        protected virtual async Task<List<T>> GetAsync<T>(string query) where T : class
+        public abstract string PrimaryQueryString { get; set; }
+        public abstract string FallbackDataPath { get; set; }
+
+        public async Task<List<T>> GetAsync<T>(string query) 
         {
-            using HttpClient? client = new() { BaseAddress = new Uri(BaseURL) };
+            using HttpClient? client = new() { BaseAddress = new Uri(_baseURL) };
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -29,14 +31,14 @@ namespace EmojiHut.Models
             return new List<T>();
         }
 
-        protected virtual async Task<List<T>> GetFallbackDataAsync<T>(string dataPath) where T : class
+        public async Task<List<T>> GetFallbackDataAsync<T>(string dataPath)
         {
             using var reader = new StreamReader($"{FallbackBasePath}{dataPath}");
             string json = await reader.ReadToEndAsync();
             return Deserialize<T>(json);
         }
 
-        private static List<T> Deserialize<T>(string json) where T : class
+        private static List<T> Deserialize<T>(string json) 
         {
             try
             {

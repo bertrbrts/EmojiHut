@@ -1,9 +1,11 @@
 using EmojiHut.Models;
+using EmojiHut.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IHomeViewModel, HomeViewModel>();
 builder.Services.AddSingleton<IEmoji, Emoji>();
 builder.Services.AddSingleton<ICategory, Category>();
 

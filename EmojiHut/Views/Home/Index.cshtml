@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EmojiHut.Models.Emoji>
+﻿@model EmojiHut.ViewModels.HomeViewModel
 @{
     ViewData["Title"] = "EmojiHut";
 }
@@ -10,15 +10,15 @@
         <table class="table table-bordered table-sm">
             <tr>  
                 <th>  
-                    @Html.DisplayNameFor(model => model.UnicodeName)  
+                    Name
                 </th>  
                 <th>  
-                    @Html.DisplayNameFor(model => model.Character)  
+                    Character
                 </th>
                 <th />
             </tr>  
   
-            @foreach (var item in Model) {  
+            @foreach (var item in Model.Emoji) {  
                 <tr>  
                     <td>  
                         @Html.DisplayFor(modelItem => item.UnicodeName)  

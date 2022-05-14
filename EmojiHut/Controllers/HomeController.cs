@@ -1,6 +1,6 @@
 ﻿using EmojiHut.Models;
+using EmojiHut.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace EmojiHut.Controllers
@@ -8,27 +8,17 @@ namespace EmojiHut.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IEmoji _emoji;
+        private readonly IHomeViewModel _homeViewModel;
 
-        public HomeController(ILogger<HomeController> logger, IEmoji emoji)
+        public HomeController(ILogger<HomeController> logger, IHomeViewModel homeViewModel)
         {
             _logger = logger;
-            _emoji = emoji;
+            _homeViewModel = homeViewModel;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult IndexAsync()
         {
-            List<Emoji>? allEmoji;
-            try
-            {
-                allEmoji = await _emoji.GetAllAsync();
-            }
-            catch (Exception je)
-            {
-                _logger.LogError(je, "failed to get data");
-                allEmoji = await _emoji.GetFallbackDataAsync();
-            }
-            return View(allEmoji);
+            return View(_homeViewModel);
         }
 
         public IActionResult Privacy()
