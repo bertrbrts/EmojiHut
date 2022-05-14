@@ -3,54 +3,45 @@
     ViewData["Title"] = "EmojiHut";
 }
 
-<div class="form-horizontal">  
-  
-    <hr />  
-    <div class="table-responsive">
-        <table class="table table-bordered table-sm">
-            <tr>  
-                <th>  
-                    Name
-                </th>  
-                <th>  
-                    Character
-                </th>
-                <th />
-            </tr>  
-  
-            @foreach (var item in Model.Emoji) {  
-                <tr>  
-                    <td>  
-                        @Html.DisplayFor(modelItem => item.UnicodeName)  
-                    </td>  
-                    <td>  
-                        @Html.DisplayFor(modelItem => item.Character)  
+<div class="form-horizontal">
+    @foreach (var item in Model.Emoji)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <tr>
+                    <th>
+                        Name: @Html.DisplayFor(modelItem => item.UnicodeName)
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        Character: @Html.DisplayFor(modelItem => item.Character)
                         <textarea id="@item.Character" name="@item.Slug" hidden="hidden" value="@item.Character">@item.Character</textarea>
-                    </td>  
+                    </td>
+
+                </tr>
+                <tr>
                     <td>
                         <button onclick="myFunction('@item.Character')">Copy text</button>
-                    </td> 
-                </tr>  
-} 
-        </table>  
-    </div>  
-</div> 
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>
 
 <script type="text/javascript">
-    function myFunction(text) {
-     // alert(text);
-      /* Get the text field */
-      var copyText = document.getElementById(text);
-//      alert(copyText);
+        function myFunction(text) {
+          /* Get the text field */
+          var copyText = document.getElementById(text);
+          ///* Select the text field */
+          copyText.select();
+          copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
-      ///* Select the text field */
-      copyText.select();
-      copyText.setSelectionRange(0, 99999); /* For mobile devices */
+          // /* Copy the text inside the text field */
+          navigator.clipboard.writeText(copyText.value);
 
-      // /* Copy the text inside the text field */
-      navigator.clipboard.writeText(copyText.value);
-
-      /////* Alert the copied text */
-      alert("Copied the text: " + copyText.value);
-    }
+          /////* Alert the copied text */
+          alert(copyText.value + " Copied to clipboard");
+        }
 </script>
