@@ -1,24 +1,43 @@
-﻿using Newtonsoft.Json;
+﻿using EmojiHut.Extensions;
+using Newtonsoft.Json;
 
 namespace EmojiHut.Models
 {
     public class Emoji : ModelBase, IEmoji
     {
+        private string? _slug;
         /// <summary>
         /// Description of Emoji
         /// </summary>
         [JsonProperty("slug")]
-        public string? Slug { get; set; }
+        public string? Slug
+        {
+            get
+            {
+                if (_slug != null && _slug.Contains(':'))
+                    _slug = _slug.Split(':')[0];
+
+                return _slug?.ToTitleCase() ?? string.Empty;
+            }
+            set => _slug = value;
+        }
+
         /// <summary>
         /// Unicode Character
         /// </summary>
         [JsonProperty("character")]
         public string? Character { get; set; }
+
+        private string? _unicodeName;
         /// <summary>
         /// Unicode Name
         /// </summary>
         [JsonProperty("unicodeName")]
-        public string? UnicodeName { get; set; }
+        public string? UnicodeName
+        {
+            get => _unicodeName?.ToTitleCase() ?? string.Empty;
+            set => _unicodeName = value;
+        }
         /// <summary>
         /// Code Point
         /// </summary>

@@ -1,9 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using EmojiHut.Extensions;
+using Newtonsoft.Json;
 
 namespace EmojiHut.Models
 {
     public class Category : ModelBase, ICategory
     {
+        [JsonIgnore]
+        public string CategoryName
+        {
+            get
+            {
+                if (Slug != null && Slug.Contains('-'))
+                    Slug = Slug.Split('-')[0];
+
+                return Slug?.ToTitleCase() ?? string.Empty;
+            }
+        }
+
         /// <summary>
         /// Description of Category
         /// </summary>
