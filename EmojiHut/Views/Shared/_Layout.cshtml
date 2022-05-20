@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/EmojiHut.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar bg-dark px-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow px-3 mb-3">
         <a class="navbar-brand mr-0 mr-md-2" asp-area="" asp-controller="Home" asp-action="Category" asp-route-category="">EmojiHut</a>
         <div class="navbar-nav-scroll">
             <div class="container-fluid">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-    </header>
+    </nav>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
