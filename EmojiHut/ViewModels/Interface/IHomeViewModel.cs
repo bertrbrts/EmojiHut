@@ -4,7 +4,8 @@ namespace EmojiHut.ViewModels
 {
     public interface IHomeViewModel
     {
-        List<Category> Category { get; set; }
+        public List<string?> Groups { get; set; }
+        //List<Category> Category { get; set; }
         List<Emoji> Emoji { get; set; }
     }
 }

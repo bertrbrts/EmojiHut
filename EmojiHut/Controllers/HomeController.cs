@@ -1,4 +1,5 @@
-﻿using EmojiHut.Models;
+﻿using EmojiHut.Extensions;
+using EmojiHut.Models;
 using EmojiHut.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -23,10 +24,10 @@ namespace EmojiHut.Controllers
             return View(_homeViewModel);
         }
 
-        public async Task<IActionResult> CategoryAsync(string category)
+        public async Task<IActionResult> CategoryAsync(string group)
         {
             List<Emoji>? allEmoji = await _emoji.GetAllAsync();
-            _homeViewModel.Emoji = !string.IsNullOrEmpty(category) ? allEmoji.Where(e => e.Group == category).ToList() : allEmoji;
+            _homeViewModel.Emoji = !string.IsNullOrEmpty(group) ? allEmoji.Where(e => e.Group?.Split('-')[0].ToTitleCase() == group).ToList() : allEmoji;
             return RedirectToAction("Index");
         }
 

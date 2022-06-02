@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHomeViewModel, HomeViewModel>();
 builder.Services.AddSingleton<IEmoji, Emoji>();
-builder.Services.AddSingleton<ICategory, Category>();
 
 var app = builder.Build();
 
