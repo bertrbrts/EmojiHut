@@ -10,11 +10,9 @@ namespace EmojiHut.Models
 {
     public abstract class ModelBase : IModel
     {
-        private readonly string _baseURL = "https://emoji-api.com/"; //Configuration.GetValue<string>("ApiSettings:BaseURL");
-
-        //protected readonly static IConfiguration Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-        protected readonly static string AccessKey = "08d9158028fcdddd8927c3e895ad5e84d6f4c9c0"; //Configuration.GetValue<string>("ApiSettings:AccessKey");
-        protected readonly static string FallbackBasePath = "~/EmojiHut/Data"; // Configuration.GetValue<string>("DataPath:BasePath");
+        private readonly string _baseURL = "https://emoji-api.com/"; 
+        protected readonly static string AccessKey = "08d9158028fcdddd8927c3e895ad5e84d6f4c9c0"; 
+        protected readonly static string FallbackBasePath = "~/EmojiHut/Data";
 
         public abstract string PrimaryQueryString { get; set; }
         public abstract string FallbackDataPath { get; set; }
