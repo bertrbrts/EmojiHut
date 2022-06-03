@@ -1,0 +1,34 @@
+﻿@model EmojiHut.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "EmojiHut";
+}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    @foreach (var item in Model.Emoji)
+    {
+        <div class="col">
+            <div class="card text-center w-50 h-100">
+                <h5 class="card-header h-50 align-middle">@Html.DisplayFor(modelItem => item.UnicodeName)</h5>
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Character)</h5>
+                    <textarea id="@item.Character" hidden="hidden" value="@item.Character">@item.Character</textarea>
+                    <button class="btn btn-primary" onclick="myFunction('@item.Character')">Copy</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function myFunction(text) {
+      /* Get the text field */
+      var copyText = document.getElementById(text);
+      ///* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+      // /* Copy the text inside the text field */
+      navigator.clipboard.writeText(copyText.value);
+
+      /////* Alert the copied text */
+      alert(copyText.value + " Copied to clipboard");
+    }
+</script>
