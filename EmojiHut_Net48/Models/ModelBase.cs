@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EmojiHut_Net48.Properties;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,9 +11,9 @@ namespace EmojiHut.Models
 {
     public abstract class ModelBase : IModel
     {
-        private readonly string _baseURL = "https://emoji-api.com/"; 
-        protected readonly static string AccessKey = "08d9158028fcdddd8927c3e895ad5e84d6f4c9c0"; 
-        protected readonly static string FallbackBasePath = "~/EmojiHut/Data";
+        private readonly string _baseURL = Settings.Default.API_Base_URL; 
+        protected readonly static string AccessKey = Settings.Default.API_Access_Key; 
+        protected readonly static string FallbackBasePath = Settings.Default.FallbackDataPath;
 
         public abstract string PrimaryQueryString { get; set; }
         public abstract string FallbackDataPath { get; set; }

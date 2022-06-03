@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EmojiHut_Net48.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="API_Base_URL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://emoji-api.com/</Value>
+    </Setting>
+    <Setting Name="API_Access_Key" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">08d9158028fcdddd8927c3e895ad5e84d6f4c9c0</Value>
+    </Setting>
+    <Setting Name="FallbackDataPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">~/EmojiHut/Data</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
